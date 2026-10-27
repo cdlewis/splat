@@ -55,6 +55,7 @@ class RodataRoutingTests(unittest.TestCase):
         result = subprocess.run(
             [sys.executable, "-m", "splat", "split", "config.yaml"],
             cwd=root,
+            check=False,
             env=env,
             capture_output=True,
             text=True,
