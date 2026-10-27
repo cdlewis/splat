@@ -275,8 +275,20 @@ class CommonSegC(CommonSegCodeSubsegment):
                             )
                             assert rodata_sym is not None
 
+                            # Like functions, standalone rodata emitted only for
+                            # disassemble_all is reference output, not an asm
+                            # implementation included by the C translation unit.
+                            rodata_out_dir = asm_out_dir
+                            if (
+                                spim_rodata_sym.getNameUnquoted()
+                                not in self.global_asm_rodata_syms
+                                and options.opts.disassemble_all
+                                and not is_new_c_file
+                            ):
+                                rodata_out_dir = matching_asm_out_dir
+
                             self.create_unmigrated_rodata_file(
-                                spim_rodata_sym, asm_out_dir, rodata_sym
+                                spim_rodata_sym, rodata_out_dir, rodata_sym
                             )
 
             if options.opts.make_full_disasm_for_code:
